@@ -1,35 +1,27 @@
 package com.theft.curcon.service;
 
 import com.theft.curcon.model.Valute;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Map;
 
 @Component
+@RequiredArgsConstructor
 public class CurrencyDataService {
 
     private final ParseValute parseValute;
-    @Getter
-    private Map<String, Valute> valutes;
 
-    @Autowired
-    public CurrencyDataService(ParseValute parseValute) {
-        this.parseValute = parseValute;
-        this.valutes = parseValute.parse(LocalDate.now());
-    }
-
-    public void updateData(LocalDate date) {
-        this.valutes = parseValute.parse(date);
-    }
-
-    public Valute getByValuteCode(String charCode) {
-        Valute valute = valutes.get(charCode);
+    public Valute getByValuteCodeByDate(String charCode, LocalDate date) {
+        Valute valute = parseValute.parse(date).get(charCode);
         if (valute == null) {
             throw new IllegalArgumentException("Валюта с кодом " + charCode + " не найдена!");
         }
         return valute;
+    }
+
+    public Map<String, Valute> getAllValutesByDate(LocalDate date) {
+        return parseValute.parse(date);
     }
 }

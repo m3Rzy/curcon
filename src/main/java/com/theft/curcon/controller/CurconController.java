@@ -1,6 +1,7 @@
 package com.theft.curcon.controller;
 
 import com.theft.curcon.service.CurrencyDataService;
+import com.theft.curcon.util.DateFormatter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,23 +16,34 @@ public class CurconController {
     private CurrencyDataService currencyDataService;
 
     @GetMapping
-    public ResponseEntity<?> getAllValutes() {
-        log.info("The values were successfully displayed!");
-        return ResponseEntity
-                .status(201)
-                .body(currencyDataService.getValutes());
+    public ResponseEntity<?> getAllValutesToday(@RequestParam String date) {
+        try {
+            return ResponseEntity
+                    .status(201)
+                    .body(currencyDataService.getAllValutesByDate(
+                            DateFormatter
+                                    .fromStringToDate(date)));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(404)
+                    .body("Неверный формат даты!");
+        }
     }
 
     @GetMapping("/{valute}")
-    public ResponseEntity<?> getByValute(@PathVariable String valute) {
+    public ResponseEntity<?> getByValute(@PathVariable String valute, @RequestParam String date) {
         try {
-            log.info("User was displayed {}", valute);
             return ResponseEntity
                     .status(201)
-                    .body(currencyDataService.getByValuteCode(valute));
+                    .body(currencyDataService.getByValuteCodeByDate(valute.toUpperCase(), DateFormatter
+                            .fromStringToDate(date)));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(404)
+                    .body("Неверный формат даты!");
         } catch (Exception e) {
             return ResponseEntity
-                    .status(400)
+                    .status(404)
                     .body("Такой валюты не существует!");
         }
     }

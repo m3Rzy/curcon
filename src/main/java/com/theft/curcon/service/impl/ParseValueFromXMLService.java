@@ -1,6 +1,7 @@
-package com.theft.curcon.service;
+package com.theft.curcon.service.impl;
 
 import com.theft.curcon.model.Valute;
+import com.theft.curcon.service.ParseValute;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.*;
 
