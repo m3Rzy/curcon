@@ -1,12 +1,13 @@
 package com.theft.curcon.controller;
 
-import com.theft.curcon.service.ValuteDataServiceImpl;
+import com.theft.curcon.service.data.ValuteDataService;
 import com.theft.curcon.util.DateFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.format.DateTimeParseException;
 import java.util.function.Supplier;
 
 @RestController
@@ -15,7 +16,7 @@ import java.util.function.Supplier;
 @Slf4j
 public class CurconController {
 
-    private final ValuteDataServiceImpl valuteDataService;
+    private final ValuteDataService valuteDataService;
 
     @GetMapping
     public ResponseEntity<?> getAllValutesToday(@RequestParam(required = false) String date) {
@@ -38,8 +39,11 @@ public class CurconController {
             return ResponseEntity.ok(action.get());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Произошла ошибка: " + e.getMessage());
+        } catch (DateTimeParseException e) {
+            return ResponseEntity.badRequest().body("Неверный формат даты: " + e.getMessage());
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(500).body("Произошла ошибка: " + e.getMessage() + "| " + e.getClass());
         }
     }
 }
