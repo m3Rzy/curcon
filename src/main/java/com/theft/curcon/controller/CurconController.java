@@ -20,6 +20,7 @@ public class CurconController {
 
     @GetMapping
     public ResponseEntity<?> getAllValutesToday(@RequestParam(required = false) String date) {
+        valuteDataService.test();
         return handleRequest(() ->
                 valuteDataService.getAllValutesByDate(DateFormatter.fromStringToDate(date))
         );
