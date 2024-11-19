@@ -1,4 +1,4 @@
-package com.theft.curcon.service;
+package com.theft.curcon.service.parser;
 
 import com.theft.curcon.model.Valute;
 

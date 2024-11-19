@@ -1,6 +1,7 @@
 package com.theft.curcon.service;
 
 import com.theft.curcon.model.Valute;
+import com.theft.curcon.service.parser.ParseValute;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +10,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class CurrencyDataService {
+public class ValuteDataServiceImpl {
 
     private final ParseValute parseValute;
 
